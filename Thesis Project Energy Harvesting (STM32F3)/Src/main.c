@@ -60,6 +60,7 @@ unsigned ADC_raw[2];
 unsigned char index= 0;
 float Vdd;
 float Vin;
+float Energy;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -101,17 +102,20 @@ static void MX_USART3_UART_Init(void);
 //}
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)  
 {
- if (__HAL_ADC_GET_FLAG(hadc, ADC_FLAG_EOC)) 
+  if (__HAL_ADC_GET_FLAG(hadc, ADC_FLAG_EOC)) 
   {
-  ADC_raw[index] = HAL_ADC_GetValue(hadc)+3; 
-  index++;
+    ADC_raw[index] = HAL_ADC_GetValue(hadc)+3; 
+    index++;
   }
-if (__HAL_ADC_GET_FLAG(hadc, ADC_FLAG_EOS))  
- {
- index=0;
- Vdd = 3300 * (*VREFINT_CAL_ADDR) / ADC_raw[0];
- Vin = Vdd*ADC_raw[1]/4095;
- }
+  if (__HAL_ADC_GET_FLAG(hadc, ADC_FLAG_EOS))  
+  {
+    index=0;
+    Vdd = 3300 * (*VREFINT_CAL_ADDR) / ADC_raw[0];
+    Vin = Vdd*ADC_raw[1]/4095;
+    //Calculate the energy content of the capacitor
+    //Energy = 0.5 * C [Farad] * U [Volt]
+    Energy = 0.5 * 1 * Vin;
+  }
 }
   // sConfig.SamplingTime = ADC_SAMPLETIME_601CYCLES_5;
 /* USER CODE END 0 */
@@ -161,7 +165,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
     HAL_Delay(200);
     HAL_ADC_Start_IT(&hadc1);;
-    HAL_UART_Transmit(&huart3, (uint8_t*)buffer, sprintf(buffer, "{%f}\n\r", Vin), 5000);
+    HAL_UART_Transmit(&huart3, (uint8_t*)buffer, sprintf(buffer, "%f,\n\r", Energy), 5000);
      /* Start the transmission process */
 //    if(HAL_UART_Transmit_IT(&huart3, (uint8_t *)Buffer, BUFFERSIZE)!= HAL_OK)
 //    {
