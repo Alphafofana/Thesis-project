@@ -23,14 +23,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
- 
-ITStatus UartReady = RESET;
+#include "UART_Transmit.h"
 
-/* Size of Transmission buffer */ 
-   char buffer[22];
-   uint8_t *array;
-   unsigned char *chptr;
-   
    
 /* USER CODE END Includes */
 
@@ -52,7 +46,7 @@ ITStatus UartReady = RESET;
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
 
-UART_HandleTypeDef huart3;
+//UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
@@ -60,14 +54,14 @@ unsigned ADC_raw[2];
 unsigned char index= 0;
 float Vdd;
 float Vin;
-float Energy;
+float Energy; //Change to ADCMesurment or power
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_ADC1_Init(void);
-static void MX_USART3_UART_Init(void);
+//static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 
@@ -165,18 +159,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
     HAL_Delay(200);
     HAL_ADC_Start_IT(&hadc1);;
-    HAL_UART_Transmit(&huart3, (uint8_t*)buffer, sprintf(buffer, "%f,\n\r", Energy), 5000);
-     /* Start the transmission process */
-//    if(HAL_UART_Transmit_IT(&huart3, (uint8_t *)Buffer, BUFFERSIZE)!= HAL_OK)
-//    {
-//      Error_Handler();
-//    }
-//    /* Wait for the end of the transfer */
-//    while (UartReady != SET)
-//    {
-//    }
-//    /* Reset transmission flag */ 
-//    UartReady = RESET;
+    UART_Transmit(Energy);
    }
   /* USER CODE END 3 */
 }
@@ -297,41 +280,6 @@ static void MX_ADC1_Init(void)
 }
 
 /**
-  * @brief USART3 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USART3_UART_Init(void)
-{
-
-  /* USER CODE BEGIN USART3_Init 0 */
-
-  /* USER CODE END USART3_Init 0 */
-
-  /* USER CODE BEGIN USART3_Init 1 */
-
-  /* USER CODE END USART3_Init 1 */
-  huart3.Instance = USART3;
-  huart3.Init.BaudRate = 9600;
-  huart3.Init.WordLength = UART_WORDLENGTH_8B;
-  huart3.Init.StopBits = UART_STOPBITS_1;
-  huart3.Init.Parity = UART_PARITY_NONE;
-  huart3.Init.Mode = UART_MODE_TX_RX;
-  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
-  huart3.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  huart3.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_UART_Init(&huart3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART3_Init 2 */
-
-  /* USER CODE END USART3_Init 2 */
-
-}
-
-/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -404,34 +352,8 @@ static void MX_GPIO_Init(void)
 
 }
 
-/* USER CODE BEGIN 4 */
-/**
-* @brief Tx Transfer completed callback
-* @param UartHandle: UART handle.
-* @note This example shows a simple way to report end of IT Tx transfer, and
-* you can add your own implementation.
-* @retval None
-*/
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandle)
-{
-/* Set transmission flag: transfer complete*/ 
-  UartReady = SET;
-}
 /* USER CODE END 4 */
 
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
-void Error_Handler(void)
-{
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  while(1) 
-  {
-  }
-  /* USER CODE END Error_Handler_Debug */
-}
 
 #ifdef  USE_FULL_ASSERT
 /**

@@ -14,11 +14,17 @@
 #define __UART_TRANSMITT_H
 
 /* Includes ------------------------------------------------------------------*/
-//#include "stm32f3xx_hal.h"
+#include "stm32f3xx_hal.h"
 
 /* Defines ------------------------------------------------------------------*/
 
 //* Function prototypes -----------------------------------------------*/
-//void TX_UART(DataBitstream_TypeDef* Data);
+void MX_USART3_UART_Init();
+void UART_Transmit(float Data);
+void UART_TransmitIT(float Data);
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandle);
+void Error_Handler(void);
+
+
 
 #endif /* __UART_TRANSMITT_H */
