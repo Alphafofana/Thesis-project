@@ -18,7 +18,7 @@ UART_HandleTypeDef huart3;
 /* Transmission flag status for transmission through interrupt*/ 
 ITStatus UartReady = RESET;
 /* Size of Transmission buffer */ 
- char Buffer[22];
+ char Buffer[Transmission_Buffer_Size];
 
  /**
   * @brief USART3 Initialization Function

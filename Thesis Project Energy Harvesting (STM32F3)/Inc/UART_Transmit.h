@@ -18,6 +18,8 @@
 
 /* Defines ------------------------------------------------------------------*/
 
+#define Transmission_Buffer_Size 22
+
 //* Function prototypes -----------------------------------------------*/
 void MX_USART3_UART_Init();
 void UART_Transmit(float Data);
