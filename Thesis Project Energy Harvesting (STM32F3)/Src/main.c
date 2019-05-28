@@ -113,8 +113,9 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
     Vdd = 3300 * (*VREFINT_CAL_ADDR) / ADC_raw[0];
     Vin = Vdd*ADC_raw[1]/4095;
     //Calculate the energy content of the capacitor
-    //Energy = 0.5 * C [Farad] * U [Volt]
-    Energy = 0.5 * 1 * Vin;
+    //Energy = 0.5 * C [Farad] * U [Volt] squared
+    //Energy = 
+    Energy = 0.5 * 1 * Vin * Vin;
   }
 }
   // sConfig.SamplingTime = ADC_SAMPLETIME_601CYCLES_5;
