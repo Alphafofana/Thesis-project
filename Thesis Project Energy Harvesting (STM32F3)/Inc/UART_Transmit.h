@@ -19,6 +19,7 @@
 /* Defines ------------------------------------------------------------------*/
 
 #define Transmission_Buffer_Size 22
+#define Timeout_Time 5000
 
 //* Function prototypes -----------------------------------------------*/
 void MX_USART3_UART_Init();

@@ -61,7 +61,7 @@ void MX_USART3_UART_Init()
 */
 void UART_Transmit(float Data)
 {
-  HAL_UART_Transmit(&huart3, (uint8_t*)Buffer, sprintf(Buffer, "%f,\n\r", Data), 5000);
+  HAL_UART_Transmit(&huart3, (uint8_t*)Buffer, sprintf(Buffer, "%f,\n\r", Data), Timeout_Time);
 }
 
 /**
